@@ -1,0 +1,16 @@
+.modal{
+    background: #c5c5c5;
+    width: 600px;
+    height: 350px;
+    position: absolute;
+    transform: translate(66%, 50%);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.button{
+    background: green;
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+}

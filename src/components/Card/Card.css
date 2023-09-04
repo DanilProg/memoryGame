@@ -1,0 +1,24 @@
+.card{
+    border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(0, 171, 255, 0.62);
+}
+.card__none{
+    background: black;
+}
+.card-active{
+    transition: 1s;
+    background: #ef78d5;
+    border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    cursor: pointer;
+    user-select: none;
+}

@@ -1,0 +1,19 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+button{
+    all:unset;
+}
+.container{
+    width: 1400px;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+.main{
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}

@@ -2,6 +2,7 @@ import {Card} from "../Card/Card";
 import './Cards.css'
 import {useEffect, useState} from "react";
 import {Modal} from "../Modal/Modal";
+import {createPortal} from "react-dom";
 
 export interface PropsCards {
     setStep: any;
@@ -11,31 +12,30 @@ export interface PropsCards {
 let timerID: any
 export const Cards = ({setStep, step}: PropsCards) => {
     const [cards, setCards]: any = useState([])
-    const [card, setCard]: any = useState([])
+    const [openCard, setOpenCard]: any = useState([])
     const [exitValue, setExitValue]: any = useState([])
     const finishGame = () => {
-        setCard([])
+        setOpenCard([])
         setExitValue([])
         setStep(0)
         arrayRandom()
-        return {step: 40 - step, unsolved: cards.length - exitValue.length, }
     }
     useEffect(() => {
-        arrayRandom()
+        finishGame()
     }, [])
     const updateCard = (value: { id: number; value: number; }) => {
 
-        if (card.length >= 2) {
+        if (openCard.length >= 2) {
             clearTimeout(timerID)
-            setCard([])
+            setOpenCard([])
         }
-        if (card[0]?.id === value.id) {
+        if (openCard[0]?.id === value.id) {
             console.log('Пошел нахуй')
         } else {
             setStep((prevState: any) => {
                 return prevState + 1
             })
-            setCard((prevState: any) => {
+            setOpenCard((prevState: any) => {
                 return [...prevState, value]
             })
         }
@@ -47,34 +47,38 @@ export const Cards = ({setStep, step}: PropsCards) => {
         }))
     }
     useEffect(() => {
-        if (card.length === 2) {
-            if (card[0].value === card[1].value) {
-                setExitValue([...exitValue, card[0], card[1]])
+        if (openCard.length === 2) {
+            if (openCard[0].value === openCard[1].value) {
+                setExitValue([...exitValue, openCard[0], openCard[1]])
             } else {
                 timerID = setTimeout(() => {
-                    setCard([])
+                    setOpenCard([])
                 }, 1500)
 
             }
         }
-    }, [card])
+    }, [openCard])
 
     return (
         <>
             {step >= 40 ?
-                <Modal
-                    finishGame={finishGame}
-                    step={40 - step}
-                    unsolved={(cards.length - exitValue.length) / 2}
-                    open={exitValue.length / 2}
-                />
+                createPortal(
+                    <Modal
+                        finishGame={finishGame}
+                        step={40 - step}
+                        unsolved={(cards.length - exitValue.length) / 2}
+                        open={exitValue.length / 2}
+                    />,
+                    document.body
+                )
+
                 :
                 <div className='cards'>
                     {
                         cards.map((value: any, index: any) => <Card key={value.id}
                                                                     value={value.value}
                                                                     updateCard={() => updateCard(value)}
-                                                                    show={Boolean(card.find((cardObject: any) => cardObject.id === value.id))}
+                                                                    show={Boolean(openCard.find((cardObject: any) => cardObject.id === value.id))}
                                                                     exit={Boolean(exitValue.find((exit: any) => exit.id === value.id))}
                                                                     step={step}
                         />)

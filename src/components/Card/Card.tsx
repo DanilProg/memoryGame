@@ -13,8 +13,8 @@ interface PropsCard {
 export const Card:FC<PropsCard> = ({value, updateCard, show, exit, step}) => {
 
     return (
-        <div className={exit ? 'card__none' : show ? 'card-active' : 'card'} onClick={updateCard} style={exit || step >= 40 ? {pointerEvents:"none"}: {}}>
-            <h3>{exit ? 'none' : show ? value : ''}</h3>
+        <div className={exit || step >=40 ? 'card__none' : show ? 'card-active' : 'card'} onClick={updateCard}>
+            <h3>{show ? value : ''}</h3>
         </div>
     );
 };

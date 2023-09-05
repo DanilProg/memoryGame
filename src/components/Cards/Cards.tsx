@@ -5,23 +5,22 @@ import {Modal} from "../Modal/Modal";
 import {createPortal} from "react-dom";
 
 export interface PropsCards {
-    setStep: any;
+    setStep: ((prevState:(step:number) => number) => void);
     step: number;
 }
 type CardObject = {
     id:number;
     value:number;
 }
-let timerID: any;
+let timerID: ReturnType<typeof setTimeout>;
 export const Cards = ({setStep, step}: PropsCards) => {
     const [cards, setCards] = useState <CardObject[]>([])
     const [openCard, setOpenCard] = useState <CardObject[]>([])
     const [exitValue, setExitValue] = useState <CardObject[]>([])
-    console.log(openCard)
     const finishGame = () => {
         setOpenCard([])
         setExitValue([])
-        setStep(0)
+        setStep(() => 0)
         arrayRandom()
     }
     useEffect(() => {
@@ -82,8 +81,8 @@ export const Cards = ({setStep, step}: PropsCards) => {
                         cards.map((value:CardObject ) => <Card key={value.id}
                                                                     value={value.value}
                                                                     updateCard={() => updateCard(value)}
-                                                                    show={Boolean(openCard.find((cardObject: CardObject) => cardObject.id === value.id))}
-                                                                    exit={Boolean(exitValue.find((exit: CardObject) => exit.id === value.id))}
+                                                                    show={Boolean(openCard.find((cardObject) => cardObject.id === value.id))}
+                                                                    exit={Boolean(exitValue.find((exit) => exit.id === value.id))}
                                                                     step={step}
                         />)
                     }

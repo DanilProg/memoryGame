@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import './Modal.css'
 interface PropsModal {
-    finishGame:any
+    finishGame:() => void;
     step: number;
     unsolved: number;
     open: number;

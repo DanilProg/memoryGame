@@ -8,12 +8,16 @@ export interface PropsCards {
     setStep: any;
     step: number;
 }
-
-let timerID: any
+type CardObject = {
+    id:number;
+    value:number;
+}
+let timerID: any;
 export const Cards = ({setStep, step}: PropsCards) => {
-    const [cards, setCards]: any = useState([])
-    const [openCard, setOpenCard]: any = useState([])
-    const [exitValue, setExitValue]: any = useState([])
+    const [cards, setCards] = useState <CardObject[]>([])
+    const [openCard, setOpenCard] = useState <CardObject[]>([])
+    const [exitValue, setExitValue] = useState <CardObject[]>([])
+    console.log(openCard)
     const finishGame = () => {
         setOpenCard([])
         setExitValue([])
@@ -23,7 +27,7 @@ export const Cards = ({setStep, step}: PropsCards) => {
     useEffect(() => {
         finishGame()
     }, [])
-    const updateCard = (value: { id: number; value: number; }) => {
+    const updateCard = (value: CardObject) => {
 
         if (openCard.length >= 2) {
             clearTimeout(timerID)
@@ -32,10 +36,10 @@ export const Cards = ({setStep, step}: PropsCards) => {
         if (openCard[0]?.id === value.id) {
             console.log('Пошел нахуй')
         } else {
-            setStep((prevState: any) => {
+            setStep((prevState: number) => {
                 return prevState + 1
             })
-            setOpenCard((prevState: any) => {
+            setOpenCard((prevState: CardObject[]) => {
                 return [...prevState, value]
             })
         }
@@ -61,7 +65,7 @@ export const Cards = ({setStep, step}: PropsCards) => {
 
     return (
         <>
-            {step >= 40 ?
+            {step >= 40 || exitValue.length === 16 ?
                 createPortal(
                     <Modal
                         finishGame={finishGame}
@@ -75,11 +79,11 @@ export const Cards = ({setStep, step}: PropsCards) => {
                 :
                 <div className='cards'>
                     {
-                        cards.map((value: any, index: any) => <Card key={value.id}
+                        cards.map((value:CardObject ) => <Card key={value.id}
                                                                     value={value.value}
                                                                     updateCard={() => updateCard(value)}
-                                                                    show={Boolean(openCard.find((cardObject: any) => cardObject.id === value.id))}
-                                                                    exit={Boolean(exitValue.find((exit: any) => exit.id === value.id))}
+                                                                    show={Boolean(openCard.find((cardObject: CardObject) => cardObject.id === value.id))}
+                                                                    exit={Boolean(exitValue.find((exit: CardObject) => exit.id === value.id))}
                                                                     step={step}
                         />)
                     }

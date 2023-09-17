@@ -1,0 +1,41 @@
+.header{
+    background: #51ecf5;
+    width: auto;
+    height: 90px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.btn{
+    background: #4ccc4c;
+    padding: 15px;
+    text-align: center;
+    height: 15px;
+    width: 90px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 500ms ease;
+    margin: 15px;
+    position: relative;
+    overflow: hidden;
+}
+.btn:active{
+    opacity: 0.6;
+}
+.btn:before {
+    content:'';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    transition: all 1s ease;
+}
+.btn:hover:before {
+    width: 50%;
+}
+

@@ -1,20 +1,20 @@
 import './Card.css'
 import {FC} from "react";
+import classNames from "classnames";
 
 interface PropsCard {
     value:number;
-    updateCard:any;
+    updateCard:() => void;
     show: boolean;
     exit:boolean;
     step: number;
 }
 
-
+/**/
 export const Card:FC<PropsCard> = ({value, updateCard, show, exit, step}) => {
-
     return (
-        <div className={exit ? 'card__none' : show ? 'card-active' : 'card'} onClick={updateCard} style={exit || step >= 40 ? {pointerEvents:"none"}: {}}>
-            <h3>{exit ? 'none' : show ? value : ''}</h3>
+        <div className={classNames({'card-active': exit || show}, 'card')} onClick={updateCard}>
+            <h3>{show ? value : '' || exit ? value : ''}</h3>
         </div>
     );
 };

@@ -9,6 +9,7 @@
     background: rgba(0, 171, 255, 0.62);
 }
 .card__none{
+    pointer-events: none;
     background: black;
 }
 .card-active{

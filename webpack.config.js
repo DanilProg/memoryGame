@@ -17,7 +17,7 @@ module.exports = (env) => {
             port: 3000
         },
         resolve: {
-            extensions: ['.jsx','.js' ,'.ts', '.tsx',]
+            extensions: ['.ts', '.tsx', '.js']
         },
         module: {
             rules: [

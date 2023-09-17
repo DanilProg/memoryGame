@@ -1,16 +1,18 @@
+import {Game} from "./components/Game/Game";
+import {Header} from "./components/Header/Header";
 import {useState} from "react";
-import {Cards} from "./components/Cards/Cards";
-import {StepLimit} from "./components/StepLimit/StepLimit";
-import {Modal} from "./components/Modal/Modal";
+import { Context } from "./hook/contest";
+
 
 export const App = () => {
-    const [step, setStep]:any = useState(40)
+    const [difficultyValue, setDifficultyValue] = useState(8)
     return(
         <div className='container'>
-            <main className='main'>
-                <StepLimit children={'Шагов сделано'} step={step}/>
-                <Cards setStep={setStep} step={step}/>
-                <StepLimit children={"Шагов осталось"} step={40 - step}/>
+            <Header setDifficultyValue={setDifficultyValue}/>
+            <main>
+                <Context.Provider value={difficultyValue}>
+                <Game />
+                </Context.Provider>
             </main>
         </div>
     )

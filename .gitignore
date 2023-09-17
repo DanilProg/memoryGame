@@ -1,2 +1,4 @@
 # Default ignored files
 /node_modules
+/dist
+/.idea

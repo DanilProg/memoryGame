@@ -1,33 +1,53 @@
-import {Card} from "../Card/Card";
+import {Card} from "../Card/Card"
 import './Cards.css'
-import {useEffect, useState} from "react";
-import {Modal} from "../Modal/Modal";
-import {createPortal} from "react-dom";
+import {useContext, useEffect, useState} from "react"
+import {Modal} from "../Modal/Modal"
+import {createPortal} from "react-dom"
+import {generationArray} from "../utils";
+import classNames from "classnames";
+import {Context} from "../../hook/contest";
+import {ModalStatistic} from "../ModalStatistic/ModalStatistic";
+import {ModalRestart} from "../ModalRestart/ModalRestart";
+import {Portal} from "../Portal/Portal";
 
 export interface PropsCards {
-    setStep: ((prevState:(step:number) => number) => void);
+    setStep: ((prevState: (step: number) => number) => void);
     step: number;
+
 }
-type CardObject = {
-    id:number;
-    value:number;
+
+interface CardObject {
+    id: number;
+    value: number;
+
 }
-let timerID: ReturnType<typeof setTimeout>;
+
+let timerID: ReturnType<typeof setTimeout>
 export const Cards = ({setStep, step}: PropsCards) => {
-    const [cards, setCards] = useState <CardObject[]>([])
-    const [openCard, setOpenCard] = useState <CardObject[]>([])
-    const [exitValue, setExitValue] = useState <CardObject[]>([])
-    const finishGame = () => {
+    const [cards, setCards] = useState<CardObject[]>([])
+    const [openCard, setOpenCard] = useState<CardObject[]>([])
+    const [exitValue, setExitValue] = useState<CardObject[]>([])
+    const difficultyValue = useContext(Context)
+    const wrapperClasses = classNames('cards',
+        {
+            'cards-easy': difficultyValue === 8,
+            'cards-medium': difficultyValue === 12,
+            'cards-hard': difficultyValue === 16
+        }
+    )
+    const startGame = () => {
         setOpenCard([])
         setExitValue([])
-        setStep(() => 0)
-        arrayRandom()
+        setStep(() => 20)
+        arrayRandom(difficultyValue)
     }
     useEffect(() => {
-        finishGame()
+        startGame()
     }, [])
+    useEffect(() => {
+        startGame()
+    }, [difficultyValue])
     const updateCard = (value: CardObject) => {
-
         if (openCard.length >= 2) {
             clearTimeout(timerID)
             setOpenCard([])
@@ -43,8 +63,9 @@ export const Cards = ({setStep, step}: PropsCards) => {
             })
         }
     }
-    const arrayRandom = () => {
-        const arrayCard = Array.from({length: 8}, () => Math.floor(Math.random() * 100));
+    const arrayRandom = (value: number) => {
+        /*const arrayCard = Array.from({length: value}, () => Math.floor(Math.random() * 100))*/
+        const arrayCard = generationArray(value)
         setCards([...arrayCard, ...arrayCard].sort(() => Math.random() - 0.5).map((value) => {
             return {value, id: Math.random() * 100}
         }))
@@ -57,36 +78,37 @@ export const Cards = ({setStep, step}: PropsCards) => {
                 timerID = setTimeout(() => {
                     setOpenCard([])
                 }, 1500)
-
             }
         }
     }, [openCard])
 
     return (
         <>
-            {step >= 40 || exitValue.length === 16 ?
-                createPortal(
-                    <Modal
-                        finishGame={finishGame}
-                        step={40 - step}
-                        unsolved={(cards.length - exitValue.length) / 2}
-                        open={exitValue.length / 2}
-                    />,
-                    document.body
-                )
-
-                :
-                <div className='cards'>
-                    {
-                        cards.map((value:CardObject ) => <Card key={value.id}
-                                                                    value={value.value}
-                                                                    updateCard={() => updateCard(value)}
-                                                                    show={Boolean(openCard.find((cardObject) => cardObject.id === value.id))}
-                                                                    exit={Boolean(exitValue.find((exit) => exit.id === value.id))}
-                                                                    step={step}
+            <div className={wrapperClasses}>
+                {
+                    cards.map((value: CardObject) =>
+                        <Card key={value.id}
+                              value={value.value}
+                              updateCard={() => updateCard(value)}
+                              show={Boolean(openCard.find((cardObject) => cardObject.id === value.id))}
+                              exit={Boolean(exitValue.find((exit) => exit.id === value.id))}
+                              step={step}
                         />)
-                    }
-                </div>}
+                }
+            </div>
+            {
+                step >= 40 || exitValue.length === 16 ?
+                    <Portal>
+                        <ModalRestart startGame={startGame}
+                                      step={40 - step}
+                                      unsolved={(cards.length - exitValue.length) / 2}
+                                      open={exitValue.length / 2}/>
+                    </Portal>
+                    :
+                    ""
+
+            }
+
 
         </>
 

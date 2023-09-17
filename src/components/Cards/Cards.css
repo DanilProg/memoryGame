@@ -1,6 +1,16 @@
 .cards{
     display: grid;
+    justify-content: center;
+}
+.cards-easy{
     grid-template-columns: repeat(4, 150px);
     grid-template-rows: repeat(4, 150px);
-    justify-content: center;
+}
+.cards-medium{
+    grid-template-columns: repeat(6, 150px);
+    grid-template-rows: repeat(4, 150px);
+}
+.cards-hard{
+    grid-template-columns: repeat(8, 140px);
+    grid-template-rows: repeat(4, 140px);
 }

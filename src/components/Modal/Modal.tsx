@@ -1,21 +1,16 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import './Modal.css'
 interface PropsModal {
-    finishGame:() => void;
-    step: number;
-    unsolved: number;
-    open: number;
+    children: ReactNode;
+    textStatistic: ReactNode;
 }
-export const Modal:FC<PropsModal> = ({finishGame, open,unsolved,step}) => {
+export const Modal:FC<PropsModal> = ({children, textStatistic}) => {
     return (
         <div className='modal'>
-            <button className='button' onClick={finishGame}>Перезапустить игру</button>
+            {children}
             <div>
-                <div>Шагов осталось: {step}</div>
-                <div>Не разгаданных карт: {unsolved}</div>
-                <div>Раскрытых карт: {open}</div>
+                {textStatistic}
             </div>
-
         </div>
     );
 };
